@@ -8,6 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/// <summary>
+/// Name: Mohamed Ahmed Ali 
+/// Student Number: 301036444
+/// Project Title: BMI Calculator. 
+/// Project Description:  app that allows users to enter their weight
+/// and height and whether they are entering these values in Imperial 
+/// or Metric units, then calculates and displays the user's body mass index (BMI).
+/// </summary>
 namespace BMICalculatorApp
 {
     public partial class BMICALC : Form
@@ -17,6 +25,11 @@ namespace BMICalculatorApp
             InitializeComponent();
         }
 
+        /// <summary>
+        /// This is the event handler for Buttons Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, EventArgs e)
         {
             var TheButton = sender as Button;
@@ -26,15 +39,15 @@ namespace BMICalculatorApp
                 case "Calculate":
                     calculateBMI();
                     break;
-
-                case "Reset":
+                 case "Reset":
                     clearForm();
                     break;
-
             }
-
         }
 
+        /// <summary>
+        /// The method that calculates the BMI 
+        /// </summary>
         private void calculateBMI()
         {
             if (metricRadioButton.Checked)
@@ -43,10 +56,10 @@ namespace BMICalculatorApp
                 float _bmiweight;
                 var _bmival = 0.0;
                 if (float.TryParse(heightTextBox.Text, out _bmiheight) && (float.TryParse(weightTextBox.Text, out _bmiweight)))
-
                 _bmival = _bmiweight / (_bmiheight * _bmiheight);
                 _bmival.ToString();
                 bmiTextBox.Text += _bmival;
+                /// Calling the method that evalutes the range of BMI
                 bmiResultValidation(_bmival);
             }
             else
@@ -61,11 +74,15 @@ namespace BMICalculatorApp
                 _bmival = _bmiweight*730 / (_bmiheight * _bmiheight);
                 _bmival.ToString();
                 bmiTextBox.Text += _bmival;
+                /// Calling the method that evalutes the range of BMI
                 bmiResultValidation(_bmival);
 
             }
         }
-
+        /// <summary>
+        /// Method that evalutes the BMI Range
+        /// </summary>
+        /// <param name="bmival"></param>
         private void bmiResultValidation(double bmival)
         {
             if (bmival < 18.5)
@@ -74,6 +91,9 @@ namespace BMICalculatorApp
             }
             else if (bmival >= 18.5 && bmival < 24.9)
             {
+                var newval=0;
+                int.TryParse(bmival.ToString(), out newval);
+                resultProgressBar.Value = newval;
                 bmiResultTextBox.Text = "Normal: between 18.5 and 24.9";
             }
             else if (bmival >= 25 && bmival < 29.9)
@@ -86,6 +106,9 @@ namespace BMICalculatorApp
             }
         }
 
+        /// <summary>
+        /// The method that clears the form controls 
+        /// </summary>
         private void clearForm()
         {
             metricRadioButton.Checked = false;
