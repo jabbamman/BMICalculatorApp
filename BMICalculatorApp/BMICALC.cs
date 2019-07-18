@@ -37,6 +37,7 @@ namespace BMICalculatorApp
             switch (tag)
             {
                 case "Calculate":
+                    checkNumericInputs();
                     calculateBMI();
                     break;
                  case "Reset":
@@ -117,6 +118,41 @@ namespace BMICalculatorApp
             weightTextBox.Text = string.Empty;
             bmiTextBox.Text = string.Empty;
             bmiResultTextBox.Text = string.Empty;
+        }
+
+
+        /// <summary>
+        /// This method is to check the input before process the calculation
+        /// the code has been taken from (https://social.msdn.microsoft.com/Forums/en-US/47355657-6e48-4952-8fae-da84960f5fe0/checking-if-textbox-input-is-a-number-or-not?forum=csharplanguage)
+        /// </summary>
+        private void checkNumericInputs ()
+            {
+            string _heightString = heightTextBox.Text;
+            string _weighString = weightTextBox.Text;
+            if (_heightString.Trim() == "" && _weighString.Trim() == "")
+            {
+                return;
+            }
+
+            for (int i = 0; i < _heightString.Length; i++)
+            {
+                if (!char.IsNumber(_heightString[i]))
+                {
+                    MessageBox.Show("Please enter a valid number for Height");
+                    heightTextBox.Text = string.Empty;
+                    return;
+                }
+            }
+
+            for (int i = 0; i < _weighString.Length; i++)
+            {
+                if (!char.IsNumber(_weighString[i]))
+                {
+                    MessageBox.Show("Please enter a valid number for Weight");
+                    weightTextBox.Text = string.Empty;
+                    return;
+                }
+            }
         }
     }
 }
