@@ -37,13 +37,29 @@ namespace BMICalculatorApp
             switch (tag)
             {
                 case "Calculate":
-                    checkNumericInputs();
+                    enteryVerification();
                     calculateBMI();
+                    
                     break;
-                 case "Reset":
+                case "Reset":
                     clearForm();
                     break;
             }
+        }
+
+        private void enteryVerification()
+        {
+            if (heightTextBox.Text == "")
+            {
+                MessageBox.Show("Height box is empty");
+                heightTextBox.Focus();
+            }
+            else if (weightTextBox.Text == "")
+            {
+                MessageBox.Show("Weight box is empty");
+                heightTextBox.Focus();
+            }
+           
         }
 
         /// <summary>
@@ -57,12 +73,15 @@ namespace BMICalculatorApp
                 float _bmiweight;
                 var _bmival = 0.0;
                 if (float.TryParse(heightTextBox.Text, out _bmiheight) && (float.TryParse(weightTextBox.Text, out _bmiweight)))
-                _bmival = _bmiweight / (_bmiheight * _bmiheight);
-                _bmival.ToString();
-                bmiTextBox.Text += _bmival;
-                /// Calling the method that evalutes the range of BMI
-                bmiResultValidation(_bmival);
+                {
+                    _bmival = _bmiweight / (_bmiheight * _bmiheight);
+                    _bmival.ToString();
+                    bmiTextBox.Text += _bmival;
+                    /// Calling the method that evalutes the range of BMI
+                    bmiResultValidation(_bmival);
+                }
             }
+
             else
                 if (imperialRadioButton.Checked)
             {
@@ -71,13 +90,13 @@ namespace BMICalculatorApp
                 float _bmiweight;
                 var _bmival = 0.0;
                 if (float.TryParse(heightTextBox.Text, out _bmiheight) && (float.TryParse(weightTextBox.Text, out _bmiweight)))
-
-                _bmival = _bmiweight*730 / (_bmiheight * _bmiheight);
-                _bmival.ToString();
-                bmiTextBox.Text += _bmival;
-                /// Calling the method that evalutes the range of BMI
-                bmiResultValidation(_bmival);
-
+                {
+                    _bmival = _bmiweight * 730 / (_bmiheight * _bmiheight);
+                    _bmival.ToString();
+                    bmiTextBox.Text += _bmival;
+                    /// Calling the method that evalutes the range of BMI
+                    bmiResultValidation(_bmival);
+                }
             }
         }
         /// <summary>
@@ -94,7 +113,6 @@ namespace BMICalculatorApp
             {
                 var newval=0;
                 int.TryParse(bmival.ToString(), out newval);
-                resultProgressBar.Value = newval;
                 bmiResultTextBox.Text = "Normal: between 18.5 and 24.9";
             }
             else if (bmival >= 25 && bmival < 29.9)
@@ -112,7 +130,7 @@ namespace BMICalculatorApp
         /// </summary>
         private void clearForm()
         {
-            metricRadioButton.Checked = false;
+            metricRadioButton.Checked = true;
             imperialRadioButton.Checked = false;
             heightTextBox.Text = string.Empty;
             weightTextBox.Text = string.Empty;
@@ -122,35 +140,101 @@ namespace BMICalculatorApp
 
 
         /// <summary>
-        /// This method is to check the input before process the calculation
-        /// the code has been taken from (https://social.msdn.microsoft.com/Forums/en-US/47355657-6e48-4952-8fae-da84960f5fe0/checking-if-textbox-input-is-a-number-or-not?forum=csharplanguage)
+        /// This method is to check the input during change process the calculation
+        /// the code has been taken from (https://www.c-sharpcorner.com/forums/text-box-validation-for-numbers-and-decimal-in-c-sharp)
         /// </summary>
-        private void checkNumericInputs ()
+
+
+        private void heightTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Checkinputdataheigh(e);
+
+        }
+
+        private void Checkinputdataheigh(KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',')
             {
-            string _heightString = heightTextBox.Text;
-            string _weighString = weightTextBox.Text;
-            if (_heightString.Trim() == "" && _weighString.Trim() == "")
-            {
-                return;
+                e.Handled = true;
             }
 
-            for (int i = 0; i < _heightString.Length; i++)
+            //check if '.' , ',' pressed
+            char sepratorChar = 's';
+            if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                if (!char.IsNumber(_heightString[i]))
+                // check if it's in the beginning of text not accept
+                if (heightTextBox.Text.Length == 0)
                 {
-                    MessageBox.Show("Please enter a valid number for Height");
-                    heightTextBox.Text = string.Empty;
-                    return;
+                    e.Handled = true;
+                }
+                // check if there is already exist a '.' , ','
+                if (alreadyExist(heightTextBox.Text, ref sepratorChar))
+                {
+                    e.Handled = true;
+
+                }
+
+                if (Char.IsDigit(e.KeyChar))
+                {
+                    //check if a coma or dot exist
+                    if (alreadyExist(heightTextBox.Text, ref sepratorChar))
+                    {
+                        int sepratorPosition = heightTextBox.Text.IndexOf(sepratorChar);
+                        string afterSepratorString = heightTextBox.Text.Substring(sepratorPosition + 1);
+                        if (heightTextBox.SelectionStart > sepratorPosition && afterSepratorString.Length > 1)
+                        {
+                            e.Handled = true;
+                        }
+                    }
                 }
             }
+        }
 
-            for (int i = 0; i < _weighString.Length; i++)
+        private bool alreadyExist(string text, ref char sepratorChar)
+        {
+            return false;
+        }
+
+        private void weightTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            checInpuWeight(e);
+        }
+
+        private void checInpuWeight(KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',')
             {
-                if (!char.IsNumber(_weighString[i]))
+                e.Handled = true;
+            }
+
+            //check if '.' , ',' pressed
+            char sepratorChar = 's';
+            if (e.KeyChar == '.' || e.KeyChar == ',')
+            {
+                // check if it's in the beginning of text not accept
+                if (weightTextBox.Text.Length == 0)
                 {
-                    MessageBox.Show("Please enter a valid number for Weight");
-                    weightTextBox.Text = string.Empty;
-                    return;
+                    e.Handled = true;
+                }
+                // check if there is already exist a '.' , ','
+                if (alreadyExist(weightTextBox.Text, ref sepratorChar))
+                {
+                    e.Handled = true;
+
+                }
+
+                if (Char.IsDigit(e.KeyChar))
+                {
+                    //check if a coma or dot exist
+                    if (alreadyExist(weightTextBox.Text, ref sepratorChar))
+                    {
+                        int sepratorPosition = weightTextBox.Text.IndexOf(sepratorChar);
+                        string afterSepratorString = weightTextBox.Text.Substring(sepratorPosition + 1);
+                        if (weightTextBox.SelectionStart > sepratorPosition && afterSepratorString.Length > 1)
+                        {
+                            e.Handled = true;
+                        }
+                    }
                 }
             }
         }
