@@ -184,9 +184,9 @@
             // 
             // resultProgressBar
             // 
-            this.resultProgressBar.Location = new System.Drawing.Point(39, 395);
+            this.resultProgressBar.Location = new System.Drawing.Point(4, 378);
             this.resultProgressBar.Name = "resultProgressBar";
-            this.resultProgressBar.Size = new System.Drawing.Size(238, 21);
+            this.resultProgressBar.Size = new System.Drawing.Size(299, 38);
             this.resultProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.resultProgressBar.TabIndex = 13;
             this.resultProgressBar.Tag = "df";
