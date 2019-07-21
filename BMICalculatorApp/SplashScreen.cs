@@ -24,5 +24,10 @@ namespace BMICalculatorApp
             BMICALC.Show();
             Hide();
         }
+
+        private void SplashScreen_Load(object sender, EventArgs e)
+        {
+            splashTimer.Enabled = true;
+        }
     }
 }

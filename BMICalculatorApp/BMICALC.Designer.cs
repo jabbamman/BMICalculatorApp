@@ -186,7 +186,7 @@
             // 
             this.resultProgressBar.Location = new System.Drawing.Point(4, 378);
             this.resultProgressBar.Name = "resultProgressBar";
-            this.resultProgressBar.Size = new System.Drawing.Size(299, 38);
+            this.resultProgressBar.Size = new System.Drawing.Size(296, 38);
             this.resultProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.resultProgressBar.TabIndex = 13;
             this.resultProgressBar.Tag = "df";
@@ -196,7 +196,7 @@
             this.bmiResultTextBox.Location = new System.Drawing.Point(4, 336);
             this.bmiResultTextBox.Multiline = true;
             this.bmiResultTextBox.Name = "bmiResultTextBox";
-            this.bmiResultTextBox.Size = new System.Drawing.Size(299, 36);
+            this.bmiResultTextBox.Size = new System.Drawing.Size(296, 36);
             this.bmiResultTextBox.TabIndex = 13;
             // 
             // BMICALC
