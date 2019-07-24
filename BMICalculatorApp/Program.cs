@@ -23,6 +23,7 @@ namespace BMICalculatorApp
         /// 18 July 2019: Adding Progress Bar and entry validation.
         /// 20 July 2019: Functionality of Progress Bar.
         /// 21 July 2019: Splash Screen.
+        /// 22 July 2019: Adding the Number Entry Via Buttons.
         /// 
         /// 
         /// </summary>

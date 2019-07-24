@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -23,6 +18,19 @@ namespace BMICalculatorApp
         }
 
         /// <summary>
+        /// This is the method to load the form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+        private void BMICALC_Load(object sender, EventArgs e)
+        {
+            this.Width = 320;
+            this.Height = 480;
+            this.CenterToScreen();
+            clearForm();
+        }
+        /// <summary>
         /// This is the event handler for Buttons Click
         /// </summary>
         /// <param name="sender"></param>
@@ -37,7 +45,6 @@ namespace BMICalculatorApp
                     enteryVerification();
                     calculateBMI();
                     bmiResultToProgressBar();
-
                     break;
                 case "Reset":
                     clearForm();
@@ -115,9 +122,6 @@ namespace BMICalculatorApp
                     /// Calling the method that evalutes the range of BMI
                     bmiResultValidation(_bmival);
                 }
-                
-
-                
             }
         }
         /// <summary>
@@ -130,14 +134,14 @@ namespace BMICalculatorApp
             {
                 bmiResultTextBox.Text = "Underweight: less than 18.5";
             }
-            else if (bmival >= 18.5 && bmival < 24.9)
+            else if (bmival >= 18.5 && bmival <= 24.99)
             {
                 var newval=0;
                 int.TryParse(bmival.ToString(), out newval);
                 bmiResultTextBox.Text = "Normal: between 18.5 and 24.9";
                 
             }
-            else if (bmival >= 25 && bmival < 29.9)
+            else if (bmival >= 25 && bmival <= 29.99)
             {
                 bmiResultTextBox.Text = "Overweight: between 25 and 29.9";
             }
@@ -148,11 +152,11 @@ namespace BMICalculatorApp
         }
 
         /// <summary>
-        /// The method that clears the form controls 
+        /// The method that clears the form controls and to reset values
         /// </summary>
         private void clearForm()
         {
-            
+            ClearNumericKeyboard();
             resultProgressBar.Value = 0;
             CalcBtntableLayoutPanel.Visible = false;
             metricRadioButton.Checked = true;
@@ -163,28 +167,31 @@ namespace BMICalculatorApp
             bmiResultTextBox.Text = string.Empty;
         }
 
+        private void ClearNumericKeyboard()
+        {
+            Resultlbl.Text = "0";
+            outputstring = string.Empty;
+            decimalExist = false;
+            outputValue = 0.0f;
+
+                       
+        }
 
         /// <summary>
         /// This method is to check the input during change process the calculation
         /// the code has been taken from (https://www.c-sharpcorner.com/forums/text-box-validation-for-numbers-and-decimal-in-c-sharp)
         /// </summary>
-
-
         private void heightTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
         /// Calling the method that forcing the user to enter numeric and seperators only
-            
-            Checkinputdataheigh(e);
-
+            Checkinputheight(e);
         }
-
-        private void Checkinputdataheigh(KeyPressEventArgs e)
+        private void Checkinputheight(KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',')
             {
                 e.Handled = true;
             }
-
             //check if '.' , ',' pressed
             char sepratorChar = 's';
             if (e.KeyChar == '.' || e.KeyChar == ',')
@@ -198,9 +205,7 @@ namespace BMICalculatorApp
                 if (alreadyExist(heightTextBox.Text, ref sepratorChar))
                 {
                     e.Handled = true;
-
                 }
-
                 if (Char.IsDigit(e.KeyChar))
                 {
                     //check if a coma or dot exist
@@ -224,16 +229,14 @@ namespace BMICalculatorApp
 
         private void weightTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            checInpuWeight(e);
+            checkInputWeight(e);
         }
-
-        private void checInpuWeight(KeyPressEventArgs e)
+        private void checkInputWeight(KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != ',')
             {
                 e.Handled = true;
             }
-
             //check if '.' , ',' pressed
             char sepratorChar = 's';
             if (e.KeyChar == '.' || e.KeyChar == ',')
@@ -272,8 +275,6 @@ namespace BMICalculatorApp
             var tag = TheButton.Tag.ToString();
             int btnvalue;
             bool resultCondition = int.TryParse(tag, out btnvalue);
-            //Resultlbl.Text = tag;
-            // if a user pressed a number button 
             if (resultCondition)
             {
                 int maxsize = 3;
@@ -281,18 +282,39 @@ namespace BMICalculatorApp
                 {
                     maxsize = 5;
                 }
+               
+
                 if ((outputstring != "0") && (Resultlbl.Text.Count() < maxsize))
                 {
-                    outputstring += tag;
-                    Resultlbl.Text = outputstring;
+                    if (callingTxtBox == "Height")
+                    {
+                        outputstring += tag;
+                        Resultlbl.Text = outputstring;
+                        heightTextBox.Text = outputstring;
+                        
+                    }
+                    else if (callingTxtBox == "Weight")
+                    {
+                        outputstring += tag;
+                        Resultlbl.Text = outputstring;
+                        weightTextBox.Text = outputstring;
+                    }
+                    
                 }
-
-
             }
             switch (tag)
             {
                 case "clear":
                     ClearNumericKeyboard();
+                    if (callingTxtBox == "Height")
+                    {
+                        heightTextBox.Text = outputstring;
+                    }
+                    else if (callingTxtBox == "Weight")
+                    {
+                        weightTextBox.Text = outputstring;
+                    }
+
                     break;
                 case "back":
                     removeLastChar();
@@ -306,9 +328,7 @@ namespace BMICalculatorApp
                 case "decimal":
                     AddDecimalToResultLbl();
                     break;
-
             }
-
         }
 
         private void AddDecimalToResultLbl()
@@ -321,18 +341,14 @@ namespace BMICalculatorApp
                 }
                 outputstring += ".";
                 decimalExist = true;
-
             }
         }
-
         private void finalizeOutput()
         {
             if (outputstring == string.Empty)
             {
                 outputstring = "0";
             }
-            
-
             outputValue = float.Parse(outputstring);
             Heightlbl.Text = outputValue.ToString();
             CalcBtntableLayoutPanel.Visible = false;
@@ -345,14 +361,11 @@ namespace BMICalculatorApp
                 weightTextBox.Text = Heightlbl.Text;
             }
         }
-
         /// <summary>
         /// this method is removing the last char from label
         /// </summary>
         private void removeLastChar()
         {
-                        
-
             if (outputstring.Length > 1)
             {
                 var lastChar = outputstring.Substring(outputstring.Length - 1);
@@ -362,44 +375,34 @@ namespace BMICalculatorApp
                 }
                 outputstring = outputstring.Remove(outputstring.Length - 1);
                 Resultlbl.Text = outputstring;
+
+                if (callingTxtBox == "Height")
+                {
+                 
+                    heightTextBox.Text = outputstring;
+
+                }
+                else if (callingTxtBox == "Weight")
+                {
+                   
+                    weightTextBox.Text = outputstring;
+                }
+
+                
             }
-           
         }
-
         /// <summary>
-        /// this method clear the numeric keyboard
+        /// This mehod to show the numeric pad based on the selected field
         /// </summary>
-        private void ClearNumericKeyboard()
-        {
-            Resultlbl.Text = "0";
-            outputstring = string.Empty;
-            decimalExist = false;
-            outputValue = 0.0f;
-
-        }
-
-        private void FORM1_Load(object sender, EventArgs e)
-        {
-            ClearNumericKeyboard();
-        }
-
-        private void Heightlbl_Click(object sender, EventArgs e)
-        {
-            CalcBtntableLayoutPanel.Visible = true;
-        }
-
-        private void txtbox_click(object sender, EventArgs e)
+        private void heightAndWeightTxtBox_click(object sender, EventArgs e)
         {
             var _theTxtBox = sender as TextBox;
             string _theTxtBoxTag = _theTxtBox.Tag.ToString();
-            
-
             if (_theTxtBoxTag == "Height")
             {
                 CalcBtntableLayoutPanel.Visible = true;
                 callingTxtBox = "Height";
                 CalcBtntableLayoutPanel.Location= new Point(4,144);
-
             }
             else if (_theTxtBoxTag == "Weight")
             {
@@ -407,16 +410,6 @@ namespace BMICalculatorApp
                 callingTxtBox = "Weight";
                 CalcBtntableLayoutPanel.Location = new Point(4, 187);
             }
-
-        }
-
-        private void BMICALC_Load(object sender, EventArgs e)
-        {
-            this.Width = 320;
-            this.Height = 480;
-            this.CenterToScreen();
-            
-            clearForm();
 
         }
     }
